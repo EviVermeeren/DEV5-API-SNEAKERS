@@ -37,15 +37,49 @@ const newSneakerSchema = new mongoose.Schema( //dit is een schema, hierin geef j
 const Shoe = mongoose.model("Shoe", newSneakerSchema);
 
 app.get("/api/v1/shoes", async (req, res) => {
+  const userId = req.query.user;
+  const shoeId = req.query.id;
+
   try {
-    const shoes = await Shoe.find({});
-    return res.json({
-      status: "success",
-      message: "GETTING all shoes",
-      data: {
-        shoes,
-      },
-    });
+    if (shoeId) {
+      // Handle requests with a shoe ID to retrieve a specific shoe
+      const shoe = await Shoe.findById(shoeId);
+
+      if (!shoe) {
+        return res.status(404).json({
+          status: "error",
+          message: "Shoe not found",
+        });
+      }
+
+      return res.json({
+        status: "success",
+        message: `GETTING shoe with ID ${shoeId}`,
+        data: {
+          shoe,
+        },
+      });
+    } else if (userId) {
+      // Handle requests with a user ID to retrieve shoes by user
+      const shoes = await Shoe.find({ user: userId });
+      return res.json({
+        status: "success",
+        message: `GET shoes with user ID ${userId}`,
+        data: {
+          shoes,
+        },
+      });
+    } else {
+      // Handle requests without ID or user ID to retrieve all shoes
+      const shoes = await Shoe.find({});
+      return res.json({
+        status: "success",
+        message: "GETTING all shoes",
+        data: {
+          shoes,
+        },
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({
