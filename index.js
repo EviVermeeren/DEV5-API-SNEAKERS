@@ -36,6 +36,25 @@ const newSneakerSchema = new mongoose.Schema( //dit is een schema, hierin geef j
 
 const Shoe = mongoose.model("Shoe", newSneakerSchema);
 
+app.get("/api/v1/shoes", async (req, res) => {
+  try {
+    const shoes = await Shoe.find({});
+    return res.json({
+      status: "success",
+      message: "GETTING all shoes",
+      data: {
+        shoes,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+});
+
 app.post("/api/v1/shoes", async (req, res) => {
   // Assuming req.body.shoe is an object containing the shoe details
   const {
