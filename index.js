@@ -203,6 +203,45 @@ app.put("/api/v1/shoes/:id/status", async (req, res) => {
   }
 });
 
+// Define a User schema
+const userSchema = new mongoose.Schema({
+  userName: String,
+  userPassword: String,
+  userEmail: String,
+});
+
+// Create a User model
+const User = mongoose.model("User", userSchema);
+
+// Endpoint to add a new user
+app.post("/api/v1/users", async (req, res) => {
+  const { userName, userPassword, userEmail } = req.body;
+
+  // Create a new user instance
+  const newUser = new User({
+    userName,
+    userPassword,
+    userEmail,
+  });
+
+  try {
+    // Save the new user to the database
+    const user = await newUser.save();
+    res.json({
+      status: "success",
+      message: `POSTING a new user with username ${userName}`,
+      data: {
+        user,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to save user",
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
