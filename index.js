@@ -19,7 +19,6 @@ mongoose.connect(
 
 const newSneakerSchema = new mongoose.Schema(
   {
-    user: String,
     shoeType: String,
     shoeSize: Number,
     shoeColorSole: String,
@@ -29,6 +28,9 @@ const newSneakerSchema = new mongoose.Schema(
     shoeMaterialPanelDown: String,
     shoeMaterialPanelUp: String,
     status: { type: String, default: "Order placed" },
+    userName: String,
+    userAddress: String,
+    userEmail: String,
   },
   {
     collection: "shoes",
@@ -92,7 +94,6 @@ app.get("/api/v1/shoes", async (req, res) => {
 
 app.post("/api/v1/shoes", async (req, res) => {
   const {
-    user,
     shoeType,
     shoeSize,
     shoeColorSole,
@@ -101,11 +102,13 @@ app.post("/api/v1/shoes", async (req, res) => {
     shoeColorPanelUp,
     shoeMaterialPanelDown,
     shoeMaterialPanelUp,
-    status, // Include the status field in the request
+    status,
+    userName,
+    userAddress,
+    userEmail,
   } = req.body.shoe;
 
   const newShoe = new Shoe({
-    user,
     shoeType,
     shoeSize,
     shoeColorSole,
@@ -114,14 +117,17 @@ app.post("/api/v1/shoes", async (req, res) => {
     shoeColorPanelUp,
     shoeMaterialPanelDown,
     shoeMaterialPanelUp,
-    status, // Assign the provided status to the new shoe
+    status,
+    userName,
+    userAddress,
+    userEmail,
   });
 
   try {
     const shoe = await newShoe.save();
     res.json({
       status: "success",
-      message: `POSTING a new shoe for user ${user}`,
+      message: `POSTING a new shoe for user ${userName}`,
       data: {
         shoe,
       },
