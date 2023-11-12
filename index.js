@@ -132,6 +132,35 @@ app.post("/api/v1/shoes", async (req, res) => {
   }
 });
 
+app.delete("/api/v1/shoes/:id", async (req, res) => {
+  const shoeId = req.params.id;
+
+  try {
+    const shoe = await Shoe.findByIdAndDelete(shoeId);
+
+    if (!shoe) {
+      return res.status(404).json({
+        status: "error",
+        message: "Shoe not found",
+      });
+    }
+
+    return res.json({
+      status: "success",
+      message: `DELETING shoe with ID ${shoeId}`,
+      data: {
+        shoe,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to delete shoe",
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
