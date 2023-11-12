@@ -17,7 +17,7 @@ mongoose.connect(
   }
 );
 
-const newSneakerSchema = new mongoose.Schema( //dit is een schema, hierin geef je aan welke velden je wil hebben in je db
+const newSneakerSchema = new mongoose.Schema(
   {
     user: String,
     shoeType: String,
@@ -28,9 +28,10 @@ const newSneakerSchema = new mongoose.Schema( //dit is een schema, hierin geef j
     shoeColorPanelUp: String,
     shoeMaterialPanelDown: String,
     shoeMaterialPanelUp: String,
+    status: { type: String, default: "Order placed" },
   },
   {
-    collection: "shoes", //dit is de naam van de collection in de db
+    collection: "shoes",
   }
 );
 
@@ -90,7 +91,6 @@ app.get("/api/v1/shoes", async (req, res) => {
 });
 
 app.post("/api/v1/shoes", async (req, res) => {
-  // Assuming req.body.shoe is an object containing the shoe details
   const {
     user,
     shoeType,
@@ -101,6 +101,7 @@ app.post("/api/v1/shoes", async (req, res) => {
     shoeColorPanelUp,
     shoeMaterialPanelDown,
     shoeMaterialPanelUp,
+    status, // Include the status field in the request
   } = req.body.shoe;
 
   const newShoe = new Shoe({
@@ -113,6 +114,7 @@ app.post("/api/v1/shoes", async (req, res) => {
     shoeColorPanelUp,
     shoeMaterialPanelDown,
     shoeMaterialPanelUp,
+    status, // Assign the provided status to the new shoe
   });
 
   try {
@@ -157,6 +159,40 @@ app.delete("/api/v1/shoes/:id", async (req, res) => {
     return res.status(500).json({
       status: "error",
       message: "Failed to delete shoe",
+    });
+  }
+});
+
+app.put("/api/v1/shoes/:id/status", async (req, res) => {
+  const shoeId = req.params.id;
+  const { status } = req.body;
+
+  try {
+    const shoe = await Shoe.findByIdAndUpdate(
+      shoeId,
+      { $set: { status } },
+      { new: true }
+    );
+
+    if (!shoe) {
+      return res.status(404).json({
+        status: "error",
+        message: "Shoe not found",
+      });
+    }
+
+    return res.json({
+      status: "success",
+      message: `UPDATING status of shoe with ID ${shoeId}`,
+      data: {
+        shoe,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to update shoe status",
     });
   }
 });
