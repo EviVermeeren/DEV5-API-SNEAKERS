@@ -14,7 +14,7 @@ const bcrypt = require("bcrypt");
 
 const mongoose = require("mongoose");
 mongoose.connect(
-  "mongodb+srv://evivermeeren:wachtwoord@cluster0.plf34zk.mongodb.net/",
+  "mongodb+srv://evivermeeren:wachtwoord@cluster0.plf34zk.mongodb.net/?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -324,6 +324,16 @@ app.put("/api/v1/users/:id/update-password", async (req, res) => {
       message: "Internal Server Error",
     });
   }
+});
+
+// Endpoint to logout
+app.post("/api/v1/logout", (req, res) => {
+  // In a real-world scenario, you might want to handle token blacklisting or other logout mechanisms.
+  // For simplicity, we'll just send a success response for now.
+  res.json({
+    status: "success",
+    message: "Logout successful",
+  });
 });
 
 app.listen(port, () => {
