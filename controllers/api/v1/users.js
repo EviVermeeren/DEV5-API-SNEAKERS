@@ -20,7 +20,7 @@ const index = async (req, res) => {
 }
 
 const create = async (req, res) => {
-    const { userName, userPassword, userEmail } = req.body;
+    const { userName, userPassword, userEmail } = req.body.user;
 
   // Create a new user instance
   const newUser = new User({
