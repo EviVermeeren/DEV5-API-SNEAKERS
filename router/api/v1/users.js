@@ -10,7 +10,7 @@ router.post("/", userController.create);
 
 router.post("/login", userController.login);
 
-router.put("/:id/update-password", userController.updatePassword);
+router.put("/:id", userController.updatePassword);
 
 router.post("/logout", userController.logout);
 
