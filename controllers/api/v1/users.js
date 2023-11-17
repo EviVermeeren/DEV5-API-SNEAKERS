@@ -1,3 +1,7 @@
+const jwt = require("jsonwebtoken");
+const secretKey = "your_secret_key"; // Replace with your actual secret key
+
+
 const User = require("../../../models/User");
 
 const index = async (req, res) => {
