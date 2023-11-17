@@ -25,3 +25,6 @@ dist-ssr
 
 #ignore index.html
 index.html
+
+#ignore .env
+.env
