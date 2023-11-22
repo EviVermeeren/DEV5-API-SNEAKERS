@@ -1,7 +1,7 @@
 const Shoe = require("../../../models/Shoe.js");
 
 const index = async (req, res) => {
-    const userId = req.query.user;
+  const userId = req.query.user;
   const shoeId = req.query.id;
 
   try {
@@ -51,74 +51,76 @@ const index = async (req, res) => {
       message: "Internal Server Error",
     });
   }
-}
+};
 
 const create = async (req, res) => {
-    const {
-        shoeType,
-        shoeSize,
-        shoeColorSole,
-        shoeColorLaces,
-        shoeColorPanelDown,
-        shoeColorPanelUp,
-        shoeMaterialPanelDown,
-        shoeMaterialPanelUp,
-        status,
-        userName,
-        userAddress,
-        userEmail,
-      } = req.body.shoe;
-    
-      const newShoe = new Shoe({
-        shoeType,
-        shoeSize,
-        shoeColorSole,
-        shoeColorLaces,
-        shoeColorPanelDown,
-        shoeColorPanelUp,
-        shoeMaterialPanelDown,
-        shoeMaterialPanelUp,
-        status,
-        userName,
-        userAddress,
-        userEmail,
-      });
-    
-      try {
-        const shoe = await newShoe.save();
-        res.json({
-          status: "success",
-          message: `POSTING a new shoe for user ${userName}`,
-          data: {
-            shoe,
-          },
-        });
-      } catch (err) {
-        res.status(500).json({
-          status: "error",
-          message: "Failed to save shoe",
-        });
-      }
+  const {
+    shoeType,
+    shoeSize,
+    shoeColorSole,
+    shoeColorLaces,
+    shoeColorPanelDown,
+    shoeColorPanelUp,
+    shoeMaterialPanelDown,
+    shoeMaterialPanelUp,
+    jewel,
+    status,
+    userName,
+    userAddress,
+    userEmail,
+  } = req.body.shoe;
+
+  const newShoe = new Shoe({
+    shoeType,
+    shoeSize,
+    shoeColorSole,
+    shoeColorLaces,
+    shoeColorPanelDown,
+    shoeColorPanelUp,
+    shoeMaterialPanelDown,
+    shoeMaterialPanelUp,
+    jewel,
+    status,
+    userName,
+    userAddress,
+    userEmail,
+  });
+
+  try {
+    const shoe = await newShoe.save();
+    res.json({
+      status: "success",
+      message: `POSTING a new shoe for user ${userName}`,
+      data: {
+        shoe,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Failed to save shoe",
+    });
+  }
 };
 
 const destroy = async (req, res) => {
-    const shoeId = req.params.id;
+  const shoeId = req.params.id;
 
-    try {
-        const shoe = await Shoe.findByIdAndDelete(shoeId);
+  try {
+    const shoe = await Shoe.findByIdAndDelete(shoeId);
 
     if (!shoe) {
-        return res.status(404).json({
+      return res.status(404).json({
         status: "error",
         message: "Shoe not found",
       });
     }
 
     return res.json({
-        status: "success",
-        message: `DELETING shoe with ID ${shoeId}`,
-        data: {
-            shoe,
+      status: "success",
+      message: `DELETING shoe with ID ${shoeId}`,
+      data: {
+        shoe,
       },
     });
   } catch (error) {
@@ -131,7 +133,7 @@ const destroy = async (req, res) => {
 };
 
 const updateStatus = async (req, res) => {
-    const shoeId = req.params.id;
+  const shoeId = req.params.id;
   const { status } = req.body;
 
   try {
@@ -165,8 +167,8 @@ const updateStatus = async (req, res) => {
 };
 
 module.exports = {
-    index,
-    create,
-    destroy,
-    updateStatus,
-}
+  index,
+  create,
+  destroy,
+  updateStatus,
+};
