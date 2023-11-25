@@ -12,6 +12,7 @@ const newSneakerSchema = new Schema(
     shoeMaterialPanelDown: String,
     shoeMaterialPanelUp: String,
     jewel: String,
+    letters: String,
     status: { type: String, default: "Order placed" },
     userName: String,
     userAddress: String,
