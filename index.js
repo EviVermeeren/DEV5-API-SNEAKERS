@@ -1,13 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
-const Primus = require("primus");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const app = express();
 const port = 3000;
+const WSPort = 3001;
 
 app.use(express.json());
 app.use(cors());
@@ -32,6 +32,9 @@ app.use("/api/v1/users", usersRouter);
 
 const server = http.createServer(app);
 require('./primus/live.js').go(server);
+server.listen(WSPort);
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
