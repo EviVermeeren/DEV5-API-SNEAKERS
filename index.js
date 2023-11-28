@@ -31,14 +31,7 @@ app.use("/api/v1/shoes", shoesRouter);
 app.use("/api/v1/users", usersRouter);
 
 const server = http.createServer(app);
-const primus = new Primus(server, { transformer: "websockets" });
-
-primus.on("connection", (spark) => {
-  console.log("connected");
-  spark.on("data", (data) => {
-    console.log(data);
-  });
-});
+require('./primus/live.js').go(server);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
