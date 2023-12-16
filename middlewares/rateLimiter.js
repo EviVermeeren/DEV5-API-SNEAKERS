@@ -13,6 +13,9 @@ const createShoeLimiter = rateLimit({
     "Too many new shoe creation attempts from this IP, please try again later.",
 });
 
+const express = require("express");
+const app = express();
+
 app.use((err, req, res, next) => {
   if (err instanceof rateLimit.RateLimitExceeded) {
     res.status(429).json({ error: err.message }); // Send rate limit error message in the response body
