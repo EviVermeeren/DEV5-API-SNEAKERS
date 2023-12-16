@@ -6,7 +6,6 @@ const index = async (req, res) => {
 
   try {
     if (shoeId) {
-      // Handle requests with a shoe ID to retrieve a specific shoe
       const shoe = await Shoe.findById(shoeId);
 
       if (!shoe) {
@@ -24,7 +23,6 @@ const index = async (req, res) => {
         },
       });
     } else if (userId) {
-      // Handle requests with a user ID to retrieve shoes by user
       const shoes = await Shoe.find({ user: userId });
       return res.json({
         status: "success",
@@ -34,7 +32,6 @@ const index = async (req, res) => {
         },
       });
     } else {
-      // Handle requests without ID or user ID to retrieve all shoes
       const shoes = await Shoe.find({});
       return res.json({
         status: "success",

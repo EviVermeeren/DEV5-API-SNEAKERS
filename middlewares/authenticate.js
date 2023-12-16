@@ -1,10 +1,8 @@
 const jwt = require("jsonwebtoken");
 
-// authenticate middleware
 const authenticate = (req, res, next) => {
-  const token = req.headers.authorization; // get the token from the authorization header
+  const token = req.headers.authorization;
 
-  // check if token is missing
   if (!token) {
     return res
       .status(401)
@@ -12,10 +10,8 @@ const authenticate = (req, res, next) => {
   }
 
   try {
-    // verify the token using secret key
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // set user info in request for later use
     req.user = {
       userId: decoded.userId,
       isAdmin: decoded.isAdmin || false,
