@@ -4,53 +4,6 @@ const saltRounds = 10;
 const User = require("../../../models/User");
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
-const index = async (req, res) => {
-  try {
-    const users = await User.find({});
-    return res.json({
-      status: "success",
-      message: "GETTING all users",
-      data: {
-        users,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-    });
-  }
-};
-
-const create = async (req, res) => {
-  const { userName, userPassword, userEmail } = req.body.user;
-
-  // Create a new user instance
-  const newUser = new User({
-    userName,
-    userPassword,
-    userEmail,
-  });
-
-  try {
-    // Save the new user to the database
-    const user = await newUser.save();
-    res.json({
-      status: "success",
-      message: `POSTING a new user with username ${userName}`,
-      data: {
-        user,
-      },
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: "error",
-      message: "Failed to save user",
-    });
-  }
-};
-
 const login = async (req, res) => {
   console.log("Login route accessed");
 
@@ -148,17 +101,7 @@ const updatePassword = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
-  res.json({
-    status: "success",
-    message: "Logout successful",
-  });
-};
-
 module.exports = {
-  index,
-  create,
   login,
   updatePassword,
-  logout,
 };
