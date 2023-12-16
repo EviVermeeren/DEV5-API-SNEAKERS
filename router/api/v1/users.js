@@ -5,14 +5,14 @@ const router = express.Router();
 const userController = require("../../../controllers/api/v1/users.js");
 const authenticate = require("../../../middlewares/authenticate");
 
-router.get("/", userController.index);
+router.get("/", authenticate, userController.index);
 
 router.post("/", userController.create);
 
 router.post("/login", userController.login);
 
-router.put("/:id", userController.updatePassword);
+router.put("/:id", authenticate, userController.updatePassword);
 
-router.post("/logout", userController.logout);
+router.post("/logout", authenticate, userController.logout);
 
 module.exports = router;
