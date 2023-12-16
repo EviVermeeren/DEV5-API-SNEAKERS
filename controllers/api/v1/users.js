@@ -1,7 +1,8 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const saltRounds = 10; // Adjust the number of rounds according to your security requirements
-
+const saltRounds = 10;
 const User = require("../../../models/User");
+const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
 const index = async (req, res) => {
   try {
@@ -77,13 +78,23 @@ const login = async (req, res) => {
       });
     }
 
-    res.json({
-      status: "success",
-      message: "Login successful",
-      data: {
-        user,
-      },
-    });
+    if (isPasswordValid) {
+      const token = jwt.sign(
+        { userId: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      console.log("Generated Token:", token);
+
+      res.json({
+        status: "success",
+        message: "Login successful",
+        data: {
+          user,
+          token,
+        },
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({
